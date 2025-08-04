@@ -1,0 +1,12 @@
+{
+  "name": "adaptis-mcp",
+  "version": "1.0.0", 
+  "description": "Markdown file reader for MCP",
+  "main": "src/index.js",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.17.1"
+  },
+  "scripts": {
+    "start": "node src/index.js"
+  }
+}
