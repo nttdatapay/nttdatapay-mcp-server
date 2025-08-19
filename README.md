@@ -41,9 +41,9 @@ This MCP server serves as a knowledge base for payment system implementation, pr
 2. **Download the Extension**
    - Download the `.dxt` file from the [nttdatapay github](https://github.com/nttdatapay/mcp-agent)
 
-3.⁠ ⁠**Install Extension**
-   - **Easy method**: Right-click the ⁠ .dxt ⁠ file → "Open with" → Select Claude Desktop → Install
-   - **Manual method**: Open Claude Desktop → Settings → Extensions → Advanced Settings → Install Extension → Select the ⁠ .dxt ⁠ file → Install
+3. **Install Extension**
+   - **Easy method**: Right-click the `.dxt` file → "Open with" → Select Claude Desktop → Install
+   - **Manual method**: Open Claude Desktop → Settings → Extensions → Advanced Settings → Install Extension → Select the `.dxt` file → Install
 
 4. **Start Using**
    - Access tools via the tools menu in Claude
