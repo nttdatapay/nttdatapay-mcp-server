@@ -14,18 +14,18 @@ This MCP server serves as a knowledge base for payment system implementation, pr
 
 ## Use Cases
 
-### 🔧 API Implementation & Development
+### API Implementation & Development
 - **Language-specific implementations**: "How do I implement this payment API in TypeScript/Python/Java?"
 - **Feature-by-feature guidance**: Get tailored code examples for specific payment functionalities
 - **Best practices**: Access recommended patterns and security considerations
 
-### 💡 Payment Flow Understanding
+### Payment Flow Understanding
 - **System architecture**: Understand server-client communication patterns in payment systems
 - **Domain knowledge**: Get explanations of payment-specific concepts (e.g., "What is an atomToken?")
 - **Process visualization**: Step-by-step breakdowns of complex payment workflows
 - **Integration guidance**: Learn how different payment components interact
 
-### 📚 Reference & Documentation
+### Reference & Documentation
 - **Quick lookups**: Instant access to API specifications and error codes
 - **Implementation examples**: Ready-to-use code snippets and templates
 - **Troubleshooting**: Error resolution guides and debugging tips
