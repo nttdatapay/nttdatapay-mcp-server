@@ -1,287 +1,247 @@
-# Atom Payment Gateway エラーコード辞書
+# Atom Payment Gateway Error Code Dictionary【公式版】
 
-## 📋 **成功コード**
+## 📋 **Success Code**
 
-| コード | メッセージ | 説明 |
-|## 📊 **ReconStatus値の詳細**
-
-| ステータス | 名称 | 説明 | 対処法 |
-|------------|------|------|--------|
-| `RS` | Reconciled Settled | 調整済み・決済済み | 正常完了 |
-| `RNS` | Reconciled Not Settled | 調整済み・未決済 | 決済処理待ち |
-| `NRNS` | Not Reconciled Not Settled | 未調整・未決済 | 調整前状態 |
-| `PNRNS` | Payment Not Reconciled Not Settled | T0決済で未調整・未決済 | T0決済での未調整状態 |
-| `PNRS` | Payment Not Reconciled Settled | 未調整・決済済み | 決済済みだが未調整 |
+| Code | Message | Description |
+|------|---------|-------------|
+| `OTS0000` | SUCCESS | TRANSACTION SUCCESSFUL / ATOM TOKEN ID HAS BEEN GENERATED |
 
 ---
 
-## 🔧 **暗号化キー参考値**
+## 🔑 **Token Generation Errors (AUTH API)**
 
-| MerchId | reqHashKey | respHashKey | encReqKey | encResKey |
-|---------|------------|-------------|-----------|-----------|
-| 317157 | KEY123657234 | KEYRESP123657234 | A4476C2062FFA58980DC8F79EB6A799E | 75AEF0FA1B94B3C10D4F5B268F757F11 |
-
---------|------------|------|
-| `OTS0000` | SUCCESS | 正常に処理が完了しました |
-
----
-
-## 🌐 **HTTPステータスコード**
-
-| コード | 説明 | 詳細 |
-|--------|------|------|
-| `200` | Success | リクエストが正常に処理されました |
-| `400` | VALIDATION FAILED | ペイロードの検証に失敗しました |
-| `401` | AUTH SERVICE FAILED | 認証サービスでエラーが発生しました |
-| `402` | TOKEN GENERATION FAILED | トークン生成に失敗しました |
-| `403` | INVALID MERCHANT INFORMATION | マーチャント情報が無効です |
+| Code | Message | Description |
+|------|---------|-------------|
+| `OTS0000` | SUCCESS | ATOM TOKEN ID HAS BEEN GENERATED |
+| `OTS0451` | FAILED | INVALID MERCHANT INFORMATION |
+| `OTS0600` | FAILED | AUTH SERVICE FAILED |
+| `OTS0600` | FAILED | VALIDATION FAILED |
+| `OTS0600` | FAILED | TOKEN GENERATION FAILED |
 
 ---
 
-## ❌ **決済関連エラー**
+## 💳 **Payment Processing Errors (JavaScript CDN)**
 
-### **認証・設定エラー**
-| コード | メッセージ | 原因 | 対処法 |
-|--------|------------|------|--------|
-| `OTS0001` | Authentication Failed | マーチャントID/パスワードが間違っている | 認証情報を確認 |
-| `OTS0002` | Merchant Not Active | マーチャントアカウントが無効 | Atomサポートに連絡 |
-| `OTS0003` | Invalid Merchant Configuration | マーチャント設定に問題あり | 設定を見直し |
-| `OTS0004` | Service Not Available | サービスが利用できない | 時間をおいて再試行 |
-
-### **ペイロード・データエラー**
-| コード | メッセージ | 原因 | 対処法 |
-|--------|------------|------|--------|
-| `OTS0101` | Invalid Request Format | リクエスト形式が正しくない | ペイロード構造を確認 |
-| `OTS0102` | Missing Required Fields | 必須フィールドが不足 | 必要な項目を追加 |
-| `OTS0103` | Invalid Field Value | フィールド値が不正 | データ型・形式を確認 |
-| `OTS0104` | Field Length Exceeded | フィールド長が制限を超過 | 文字数を確認 |
-| `OTS0105` | Invalid Date Format | 日付形式が正しくない | YYYY-MM-DD hh:mm:ss形式に修正 |
-
-### **暗号化・署名エラー**
-| コード | メッセージ | 原因 | 対処法 |
-|--------|------------|------|--------|
-| `OTS0201` | Decryption Failed | 復号化に失敗 | 暗号化キー・ソルトを確認 |
-| `OTS0202` | Invalid Encryption Format | 暗号化形式が正しくない | 16進数大文字で暗号化 |
-| `OTS0203` | Encryption Key Mismatch | 暗号化キーが一致しない | リクエスト用キーを確認 |
-
-### **取引関連エラー**
-| コード | メッセージ | 原因 | 対処法 |
-|--------|------------|------|--------|
-| `OTS0301` | Duplicate Transaction | 重複した取引ID | 新しいmerchTxnIdを生成 |
-| `OTS0302` | Invalid Transaction Amount | 金額が不正 | 正の数値を設定 |
-| `OTS0303` | Amount Limit Exceeded | 金額上限を超過 | 金額を制限内に設定 |
-| `OTS0304` | Invalid Currency | 通貨コードが不正 | サポートされた通貨を使用 |
-
----
-
-## 💸 **リファンド関連エラー**
-
-### **リファンド処理エラー**
-| コード | メッセージ | 原因 | 対処法 |
-|--------|------------|------|--------|
-| `OTS0404` | Transaction Not Found | 指定された取引が見つからない | atomTxnId・merchTxnIdを確認 |
-| `OTS0405` | Transaction Not Eligible for Refund | リファンド対象外の取引 | 取引ステータスを確認 |
-| `OTS0406` | Refund Amount Exceeds Original | リファンド金額が元の金額を超過 | 金額を元の決済金額以下に設定 |
-| `OTS0407` | Partial Refund Not Allowed | 部分リファンドが許可されていない | 全額リファンドを実行 |
-| `OTS0408` | Refund Window Expired | リファンド期限が過ぎている | 期限内に処理を実行 |
-
-### **署名関連エラー**
-| コード | メッセージ | 原因 | 対処法 |
-|--------|------------|------|--------|
-| `OTS0506` | Signature Mismatched | 署名が一致しない | 署名生成ロジックを確認 |
-| `OTS0507` | Invalid Signature Format | 署名形式が正しくない | 16進数小文字で生成 |
-
-### **重複・競合エラー**
-| コード | メッセージ | 原因 | 対処法 |
-|--------|------------|------|--------|
-| `OTS0601` | Duplicate Refund Request | 重複したリファンドリクエスト | 新しいprodRefundIdを生成 |
-| `OTS0602` | Concurrent Refund Processing | 同時リファンド処理中 | 処理完了後に再試行 |
+| Code | Message | Description |
+|------|---------|-------------|
+| `OTS0000` | SUCCESS | TRANSACTION SUCCESSFUL |
+| `OTS0601` | FAILED | IN STAGE TWO TRANSACTION, ATOM TXN ID SHOULD NOT BE NULL |
+| `OTS0602` | FAILED | INCORRECT SURCHARGE AMOUNT |
+| `OTS0603` | FAILED | SUBCHANNEL CAN NOT BE EMPTY |
+| `OTS0604` | FAILED | IF SUBCHANNEL IS NB THEN BANK ID SHOULD NOT BE EMPTY |
+| `OTS0605` | FAILED | IF SUBCHANNEL IS CC or DC THEN CARD DATA SHOULD NOT BE EMPTY |
+| `OTS0606` | FAILED | IF SUBCHANNEL IS UP THEN VPA SHOULD NOT BE EMPTY |
+| `OTS0607` | FAILED | IF SUBCHANNEL IS EM THEN EMI DETAILS SHOULD NOT BE EMPTY |
+| `OTS0608` | FAILED | IN STAGE TWO TRANSACTION, SUBCHANNEL CAN NOT BE EMPTY |
+| `OTS0609` | FAILED | CARD DETAILS ARE MISSING |
+| `OTS0610` | FAILED | INVALID EMI TENURE |
+| `OTS0611` | FAILED | INVALID EMI BANK NAME |
+| `OTS0612` | FAILED | SUMMATION OF AMOUNT & SURCHARGE AMOUNT SHOULD BE EQUAL TO TOTAL AMOUNT |
+| `OTS0613` | FAILED | RESPONSE IS ALREADY AVAILABLE IN DB FOR ATOM TXN ID |
+| `OTS0614` | FAILED | ATOM's AMOUNT MISMATCHED WITH BANK's AMOUNT |
+| `OTS0615` | FAILED | ANY OF THE MANDATORY PARAMETER MUST BE MISSING |
+| `OTS0616` | FAILED | INSUFFICIENT MERCHANT INFORMATION |
+| `OTS0617` | FAILED | IN STAGE TWO TRANSACTION, DB STAGE SHOULD BE 1 |
+| `OTS0618` | FAILED | IN STAGE TWO TRANSACTION, PROVIDED AMOUNT SHOULD BE EQUAL TO DB AMOUNT |
+| `OTS0619` | FAILED | SUBCHANNEL & CARD TYPE MISMATCHED |
+| `OTS0620` | FAILED | CARD SCHEME MISMATCHED |
+| `OTS0621` | FAILED | AMOUNT SHOULD BE WITHIN A RANGE |
+| `OTS0622` | FAILED | ACCOUNT DETAILS MANDATORY FOR PENNYDROP |
+| `OTS0623` | FAILED | IN SEAMLESS TRANSACTION, WHEN MERCHANT IS ON SURCHARGE THEN SURCHARGE AMOUNT SHOULD |
+| `OTS0624` | FAILED | TRANSACTION RESPONSE IS ALREADY AVAILABLE FOR ATOM TXN ID |
+| `OTS0625` | FAILED | BANK TXN AMOUNT IS MISMATCHED WITH ATOM TXN AMOUNT |
+| `OTS0626` | FAILED | AMOUNT & TOTAL AMOUNT OF ALL PASSED PRODUCTS SHOULD BE EQUAL |
+| `OTS0627` | FAILED | INAPPROPRIATE WAY TO CONSUME OTS PAYMENT SERVICE |
+| `OTS0628` | FAILED | ATOM TXN ID SHOULD NOT BE EMPTY/NULL IN BANK RESPONSE |
+| `OTS0629` | FAILED | IN SEMI-SEAMLESS TRANSACTION, IF IT IS CARD TRANSACTION THEN SURCHARGE AMOUNT SHOULD NOT BE NULL/EMPTY/ZERO |
+| `OTS0630` | FAILED | CARD TYPE MISMATCHED |
+| `OTS0631` | FAILED | FAILED-INVALID CARD NUMBER |
+| `OTS0632` | FAILED | FAILED-CARD EXP MONTH/YEAR SHOULD BE IN PROPER FORMAT |
+| `OTS0633` | FAILED | FAILED-CARD IS EXPIRED |
+| `OTS0634` | FAILED | FAILED-INVALID CVV |
+| `OTS0635` | FAILED | FAILED-TRANSACTION MODE NOT FOUND IN URL PATTERN |
+| `OTS0636` | FAILED | FAILED-UNABLE TO DECRYPT CARD DETAILS |
+| `OTS0637` | FAILED | FAILED-UNABLE TO DECRYPT ENC DATA |
+| `OTS0638` | FAILED | ANY OF THE MANDATORY PARAMETER MUST BE MISSING FROM ENCDATA |
+| `OTS0639` | FAILED | FAILED-FUTURE DATE NOT ALLOWED |
+| `OTS0640` | FAILED | FAILED-DATE FORMAT MUST BE "+OTSUtil.ATOM_DATE_PATTERN |
+| `OTS0641` | FAILED | MERCHID OR ENCDATA MISSING |
 
 ---
 
-## 🔧 **システム・ネットワークエラー**
+## 🔧 **公式仕様情報**
 
-### **システムエラー**
-| コード | メッセージ | 原因 | 対処法 |
-|--------|------------|------|--------|
-| `OTS0701` | Internal Server Error | サーバー内部エラー | 時間をおいて再試行 |
-| `OTS0702` | Database Connection Error | データベース接続エラー | システム復旧を待機 |
-| `OTS0703` | Service Temporarily Unavailable | サービス一時停止中 | メンテナンス完了を待機 |
-
-### **ネットワークエラー**
-| コード | メッセージ | 原因 | 対処法 |
-|--------|------------|------|--------|
-| `OTS0801` | Request Timeout | リクエストタイムアウト | タイムアウト時間を延長 |
-| `OTS0802` | Network Connection Failed | ネットワーク接続失敗 | ネットワーク環境を確認 |
-
----
-
-## 🚨 **緊急対応が必要なエラー**
-
-### **セキュリティ関連**
-| コード | メッセージ | 対応レベル | 対処法 |
-|--------|------------|------------|--------|
-| `OTS0901` | Suspicious Activity Detected | 🔴 緊急 | セキュリティチームに連絡 |
-| `OTS0902` | Rate Limit Exceeded | 🟡 注意 | リクエスト頻度を調整 |
-| `OTS0903` | IP Address Blocked | 🟡 注意 | IPホワイトリストを確認 |
-
----
-
-## 🔍 **エラー診断フローチャート**
-
-### **決済エラー診断**
-```mermaid
-flowchart TD
-    A[エラー発生] --> B{エラーコード確認}
-    B -->|OTS0001-0004| C[認証・設定を確認]
-    B -->|OTS0101-0105| D[ペイロード構造を確認]
-    B -->|OTS0201-0203| E[暗号化処理を確認] 
-    B -->|OTS0301-0304| F[取引データを確認]
-    C --> G[マーチャント情報を再確認]
-    D --> H[必須フィールドを追加]
-    E --> I[暗号化キー・ソルトを確認]
-    F --> J[金額・通貨を修正]
-```
-
-### **リファンドエラー診断**
-```mermaid
-flowchart TD
-    A[リファンドエラー] --> B{エラーコード確認}
-    B -->|OTS0404-0408| C[取引存在・状態を確認]
-    B -->|OTS0506-0507| D[署名生成を確認]
-    B -->|OTS0601-0602| E[重複・競合を確認]
-    C --> F[atomTxnId・merchTxnIdを確認]
-    D --> G[署名生成ルールを再確認]
-    E --> H[新しいRefundIDを生成]
-```
-
----
-
-## 🛠️ **エラーハンドリング実装例**
-
-### **基本的なエラーハンドリング**
-```javascript
-function handleAtomError(responseData) {
-  const statusCode = responseData.responseDetails?.statusCode;
-  
-  switch(statusCode) {
-    case 'OTS0000':
-      return { success: true, message: '処理が正常に完了しました' };
-      
-    case 'OTS0001':
-      return { 
-        success: false, 
-        error: 'AUTHENTICATION_FAILED',
-        message: 'マーチャント認証に失敗しました。認証情報を確認してください。',
-        action: 'CHECK_CREDENTIALS'
-      };
-      
-    case 'OTS0404':
-      return {
-        success: false,
-        error: 'TRANSACTION_NOT_FOUND', 
-        message: '指定された取引が見つかりません。取引IDを確認してください。',
-        action: 'CHECK_TRANSACTION_ID'
-      };
-      
-    case 'OTS0506':
-      return {
-        success: false,
-        error: 'SIGNATURE_MISMATCH',
-        message: '署名が一致しません。署名生成ロジックを確認してください。',
-        action: 'CHECK_SIGNATURE_LOGIC'
-      };
-      
-    default:
-      return {
-        success: false,
-        error: 'UNKNOWN_ERROR',
-        message: `未知のエラーが発生しました: ${statusCode}`,
-        action: 'CONTACT_SUPPORT'
-      };
-  }
-}
-```
-
-### **詳細なエラーログ**
-```javascript
-function logAtomError(error, context) {
-  const errorLog = {
-    timestamp: new Date().toISOString(),
-    errorCode: error.statusCode,
-    errorMessage: error.message,
-    context: {
-      endpoint: context.endpoint,
-      merchId: context.merchId,
-      txnId: context.txnId,
-      amount: context.amount
+### **AUTH API Request Structure**
+```json
+{
+  "payInstrument": {
+    "headDetails": {
+      "version": "OTSv1.1",
+      "api": "AUTH", 
+      "platform": "FLASH"
     },
-    troubleshootingSteps: getErrorSteps(error.statusCode)
-  };
-  
-  console.error('Atom Payment Error:', JSON.stringify(errorLog, null, 2));
-  
-  // 緊急対応が必要なエラーの場合はアラート送信
-  if (['OTS0901', 'OTS0902'].includes(error.statusCode)) {
-    sendSecurityAlert(errorLog);
+    "merchDetails": {
+      "merchId": "317157",
+      "userId": "",
+      "password": "Test@123",
+      "merchTxnId": "019MC6VE42",
+      "merchTxnDate": "2024-12-19 06:20:42"
+    },
+    "payDetails": {
+      "amount": "319",
+      "product": "NSE",
+      "custAccNo": "213232323",
+      "txnCurrency": "INR",
+      "clientCode": ""
+    },
+    "custDetails": {
+      "custFirstName": "Ravina Solse",
+      "custEmail": "hrd-mum789@ai.in",
+      "custMobile": "09754564348"
+    },
+    "payModeSpecificData": {
+      "subChannel": "DC"
+    },
+    "extras": {
+      "udf1": "One",
+      "udf2": "Two",
+      "udf3": "Three",
+      "udf4": "Four",
+      "udf5": "Five",
+      "udf6": "Six",
+      "udf7": "Seven",
+      "udf8": "Eight",
+      "udf9": "Nine",
+      "udf10": "Ten"
+    }
   }
 }
+```
 
-function getErrorSteps(statusCode) {
-  const steps = {
-    'OTS0001': ['マーチャントID確認', 'パスワード確認', 'アカウント状態確認'],
-    'OTS0404': ['atomTxnId確認', 'merchTxnId確認', '取引存在確認'],
-    'OTS0506': ['署名文字列確認', 'ハッシュキー確認', '署名生成ロジック確認']
-  };
-  
-  return steps[statusCode] || ['サポートに連絡'];
+### **JavaScript CDN Options**
+```javascript
+const options = {
+  "atomTokenId": "atomTokenId",
+  "merchId": "8952",
+  "custEmail": "testuser@ndps.in",
+  "custMobile": "8888888888",
+  "returnUrl": "http://your-response-url/response.php"
+};
+let atom = new AtomPaynetz(options, 'uat');
+```
+
+### **Response Structure Example**
+```json
+{
+  "payInstrument": {
+    "merchDetails": {
+      "merchId": 317157,
+      "merchTxnId": "019MC6VE42",
+      "merchTxnDate": "2024-12-19T11:56:37"
+    },
+    "payDetails": {
+      "atomTxnId": 11000000615892,
+      "prodDetails": [{"prodName": "NSE", "prodAmount": 319.00}],
+      "amount": 319.00,
+      "surchargeAmount": 17.67,
+      "totalAmount": 336.67,
+      "custAccNo": "213232323",
+      "clientCode": "1234",
+      "txnCurrency": "INR",
+      "signature": "652d8df185e4073aa000f51ca2667f0e00458c4470061b1703e42981bb28887fb36145fb60b3cb3b3ab8f26d40c5a7b8019fac462101c436ee1c8e2e0731c339",
+      "txnInitDate": "2024-12-19 11:56:41",
+      "txnCompleteDate": "2024-12-19 11:57:21"
+    },
+    "payModeSpecificData": {
+      "subChannel": ["DC"],
+      "bankDetails": {
+        "otsBankId": 2,
+        "bankTxnId": "001100000061589211119",
+        "authId": "00000",
+        "otsBankName": "Hdfc Bank",
+        "cardType": "DC",
+        "cardMaskNumber": "XXXXXXXXXXXX4444",
+        "scheme": "VISA"
+      }
+    },
+    "extras": {
+      "udf1": "One",
+      "udf2": "Two",
+      "udf3": "Three",
+      "udf4": "Four",
+      "udf5": "Five"
+    },
+    "custDetails": {
+      "custFirstName": "Ravina Solse",
+      "custEmail": "hrdmum789@ai.in",
+      "custMobile": "09754564348",
+      "billingInfo": {}
+    },
+    "responseDetails": {
+      "statusCode": "OTS0000",
+      "message": "SUCCESS",
+      "description": "SUCCESS"
+    }
+  }
 }
 ```
+
+### **subChannel Values**
+| Value | Description |
+|-------|-------------|
+| `NB` | Net Banking |
+| `CC` | Credit Card |
+| `DC` | Debit Card |
+| `MW` | Wallet |
+| `PP` | PhonePe |
+| `PW` | Paytm Wallet |
+| `EM` | EMI |
+| `NR` | Challan |
+| `BQ` | BharatQR |
+| `UP` | Unified Payment Interface (UPI) |
+
+### **CDN URLs**
+```javascript
+// UAT Environment
+https://pgtest.atomtech.in/staticdata/ots/js/atomcheckout.js
+
+// Production Environment  
+https://psa.atomtech.in/staticdata/ots/js/atomcheckout.js
+```
+
+### **Encryption Requirements**
+- AES-512 encryption algorithm for request/response encryption
+- HMACSHA-512 algorithm for signature generation
+- Date format: YYYY-MM-DD hh:mm:ss
 
 ---
 
-## 📞 **サポート連絡時の情報**
+## 📊 **Parameter Requirements**
 
-### **必要な情報リスト**
+### **Mandatory Parameters (AUTH API)**
+- merchId, password, merchTxnId, merchTxnDate
+- amount, product, txnCurrency
+- custEmail, custMobile
+
+### **Conditional Parameters**
+- custAccNo: Mandatory for TPV transactions
+- subChannel: Optional (restricts payment methods when specified)
+
+### **Optional Parameters**
+- userId, clientCode
+- udf1 through udf10
+- prodDetails (for multiple products)
+
+---
+
+## 💡 **Common Error Patterns and Solutions**
+
+### **Empty Response (Content-Length: 0)**
 ```yaml
-基本情報:
-  - エラーコード
-  - エラーメッセージ
-  - 発生日時
-  - マーチャントID
-
-取引情報:
-  - merchTxnId
-  - atomTxnId (ある場合)
-  - 金額
-  - 通貨
-
-技術情報:
-  - 使用しているAPI (AUTH/REFUND/STATUS)
-  - 暗号化実装方法
-  - 署名生成方法
-  - エラー発生頻度
-```
-
-### **サポート連絡テンプレート**
-```
-件名: [エラーコード] Atom Payment Gateway エラー報告
-
-マーチャントID: [YOUR_MERCHANT_ID]
-エラーコード: [ERROR_CODE]  
-エラーメッセージ: [ERROR_MESSAGE]
-発生日時: [TIMESTAMP]
-
-取引詳細:
-- merchTxnId: [TRANSACTION_ID]
-- atomTxnId: [ATOM_TRANSACTION_ID]
-- 金額: [AMOUNT]
-- 通貨: [CURRENCY]
-
-実行したAPI: [AUTH/REFUND/STATUS]
-期待していた結果: [EXPECTED_RESULT]
-実際の結果: [ACTUAL_RESULT]
-
-追加情報:
-[ANY_ADDITIONAL_CONTEXT]
+Symptom: Empty response returned from Atom API
+Cause: Encryption processing or payload issue
+Check Points:
+  - Are you using the configured salt key?
+  - Is the IV fixed value correct?
+  - Is the payload format correct?
 ```

@@ -1,0 +1,50 @@
+{
+    "dxt_version": "0.1",
+    "name": "NDPSI-knowledge-mcp",
+    "display_name": "NDPSI Knowledge Server",
+    "version": "1.0.0", 
+    "description": "NDPSI knowledge base integration for AI agents",
+    "author": {
+      "name": "Tomoya Tachibana"
+    },
+    "server": {
+      "type": "node",
+      "entry_point": "src/index.js",
+      "mcp_config": {
+        "command": "node",
+        "args": ["${__dirname}/src/index.js"]
+      }
+    },
+    "tools": [
+      {
+        "name": "get_payment_context",
+        "description": "Get complete payment implementation context including encryption specs, API documentation, error codes, signature guides, and payment processing flows"
+      }
+    ],
+    "prompts": [
+      {
+        "name": "prompt-demo-create-fruit-shop-app",
+        "description": "Create an online shop application for a fruit shop",
+        "text": "Please implement code with functionality for when a fruit shop creates an online shop using get_payment_context as reference. Output it as 2 files: backend and frontend. Let's make the frontend simple. Please create a ready-to-run solution. The backend functionality can be a minimal MVP."
+      },
+      {
+        "name": "prompt-visualize-payment-flow",
+        "description": "Visualize the payment flow in NDPSI",
+        "text": "Easily visualize the payment flow in NDPSI as figure"
+      },
+      
+      {
+        "name": "prompt-simple-diagram-payment-flow",
+        "description": "Create a simple diagram of the payment flow",
+        "text": "A simple diagram of the payment flow in NDPSI as mermaid base"
+      },
+      
+      {
+        "name": "prompt-Create-API-get-Atomtoken-in-typescript",
+        "description": "Create an API to obtain Atomtoken in typescript",
+        "text": "Create a simple TypeScript function to get NDPSI AtomToken. No server setup needed - just a function I can call directly. Include a working example that runs immediately when I execute the file with npx tsx."
+      }
+    ],
+    "keywords": ["NDPSI", "payment", "api", "documentation", "mcp", "e-commerce"],
+    "license": "MIT"
+  }

@@ -1,12 +1,25 @@
 {
-  "name": "adaptis-mcp",
-  "version": "1.0.0", 
-  "description": "Markdown file reader for MCP",
+  "name": "NDPSI-mcp",
+  "version": "1.0.0",
+  "description": "NDPSI knowledge base for MCP",
   "main": "src/index.js",
+  "type": "module",
+  "private": true,
+  "author": "Tomoya Tachibana",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nttdatapay/mcp-agent.git"
+  },
+  "keywords": ["mcp", "model-context-protocol", "knowledge-base"],
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.17.1"
   },
   "scripts": {
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js"
   }
 }

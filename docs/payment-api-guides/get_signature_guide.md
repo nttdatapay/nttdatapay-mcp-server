@@ -1,32 +1,32 @@
-# Atom Payment Gateway 署名生成ガイド
+# Atom Payment Gateway Signature Generation Guide
 
-## 🔐 **署名の基本仕様**
+## 🔐 **Basic Signature Specifications**
 
-### **アルゴリズム**
+### **Algorithm**
 ```yaml
-署名方式: HMAC-SHA512
-出力形式: 16進数文字列（小文字）
-文字エンコード: UTF-8
+Signature Method: HMAC-SHA512
+Output Format: Hexadecimal string (lowercase)
+Character Encoding: UTF-8
 ```
 
-### **ハッシュキー（環境別）**
+### **Hash Keys (by Environment)**
 ```yaml
-リクエスト署名: "KEY123657234"
-レスポンス検証: "KEYRESP123657234"
+Request Signature: "KEY123657234"
+Response Verification: "KEYRESP123657234"
 ```
 
 ---
 
-## 📤 **API別署名生成ルール**
+## 📤 **Signature Generation Rules by API**
 
-### **1. Transaction Status API署名生成**
+### **1. Transaction Status API Signature Generation**
 ```
-署名文字列 = merchID + merchTxnID + amount + txnCurrency
+Signature String = merchID + merchTxnID + amount + txnCurrency
 ```
 
-#### **具体例**
+#### **Specific Example**
 ```javascript
-// 入力データ
+// Input data
 const data = {
   merchId: 317157,
   merchTxnId: "63d12a8782587dda",
@@ -34,22 +34,22 @@ const data = {
   txnCurrency: "INR"
 };
 
-// 署名文字列を構築
+// Build signature string
 const signatureString = 
   "317157" +                    // merchId
   "63d12a8782587dda" +         // merchTxnId
-  "1" +                        // amount（整数）
+  "1" +                        // amount (integer)
   "INR";                       // txnCurrency
 
-// 結果: "31715763d12a8782587dda1INR"
+// Result: "31715763d12a8782587dda1INR"
 
-// HMAC-SHA512で署名
+// Sign with HMAC-SHA512
 const signature = crypto.createHmac('sha512', 'KEY123657234')
   .update(signatureString)
   .digest('hex');
 ```
 
-#### **実装関数**
+#### **Implementation Function**
 ```javascript
 function generateTransactionStatusSignature(data) {
   const REQ_HASH_KEY = "KEY123657234";
@@ -57,7 +57,7 @@ function generateTransactionStatusSignature(data) {
   const signatureString = [
     data.merchId.toString(),
     data.merchTxnId.toString(),
-    data.amount.toString(),        // 整数として処理
+    data.amount.toString(),        // Process as integer
     data.txnCurrency.toString()
   ].join('');
   
@@ -69,14 +69,14 @@ function generateTransactionStatusSignature(data) {
 
 ---
 
-### **2. Refund API署名生成**
+### **2. Refund API Signature Generation**
 ```
-署名文字列 = merchId + password + merchTxnId + totalAmount + txnCurrency + api
+Signature String = merchId + password + merchTxnId + totalAmount + txnCurrency + api
 ```
 
-#### **具体例**
+#### **Specific Example**
 ```javascript
-// 入力データ
+// Input data
 const data = {
   merchId: 317157,
   password: "Test@123",
@@ -86,26 +86,26 @@ const data = {
   api: "REFUNDINIT"
 };
 
-// 署名文字列を構築
+// Build signature string
 const signatureString = 
   "317157" +              // merchId
   "Test@123" +           // password
   "6545e02c9d835" +      // merchTxnId
-  "5" +                  // totalRefundAmount（整数）
+  "5" +                  // totalRefundAmount (integer)
   "INR" +                // txnCurrency
-  "REFUNDINIT";          // api固定値
+  "REFUNDINIT";          // api fixed value
 
-// 結果: "317157Test@1236545e02c9d8355INRREFUNDINIT"
+// Result: "317157Test@1236545e02c9d8355INRREFUNDINIT"
 
-// HMAC-SHA512で署名
+// Sign with HMAC-SHA512
 const signature = crypto.createHmac('sha512', 'KEY123657234')
   .update(signatureString)
   .digest('hex');
 
-// 期待される署名: "a4df464724d1154cf2d33baf9b08cb6740637040e46d29034de472445b0df68af31de3c7089c0355bf0b5c887d568cd87b43a7b875ded9de8c9c946d4e57d40d"
+// Expected signature: "a4df464724d1154cf2d33baf9b08cb6740637040e46d29034de472445b0df68af31de3c7089c0355bf0b5c887d568cd87b43a7b875ded9de8c9c946d4e57d40d"
 ```
 
-#### **実装関数**
+#### **Implementation Function**
 ```javascript
 function generateRefundSignature(data) {
   const REQ_HASH_KEY = "KEY123657234";
@@ -114,9 +114,9 @@ function generateRefundSignature(data) {
     data.merchId.toString(),
     data.password.toString(),
     data.merchTxnId.toString(),
-    Math.floor(data.totalRefundAmount).toString(), // 整数に変換
+    Math.floor(data.totalRefundAmount).toString(), // Convert to integer
     data.txnCurrency.toString(),
-    "REFUNDINIT"                                   // API固定値
+    "REFUNDINIT"                                   // API fixed value
   ].join('');
   
   return crypto.createHmac('sha512', REQ_HASH_KEY)
@@ -127,16 +127,16 @@ function generateRefundSignature(data) {
 
 ---
 
-## 📥 **レスポンス署名検証**
+## 📥 **Response Signature Verification**
 
-### **Callback署名検証ルール**
+### **Callback Signature Verification Rules**
 ```
-署名文字列 = merchId + atomTxnId + merchTxnId + totalAmount + statusCode + subChannel + bankTxnId
+Signature String = merchId + atomTxnId + merchTxnId + totalAmount + statusCode + subChannel + bankTxnId
 ```
 
-#### **具体例**
+#### **Specific Example**
 ```javascript
-// Callbackレスポンスデータ
+// Callback response data
 const callbackData = {
   payInstrument: {
     merchDetails: { 
@@ -160,47 +160,47 @@ const callbackData = {
   }
 };
 
-// 署名文字列を構築
+// Build signature string
 const r = callbackData.payInstrument;
 const signatureString = 
   "317157" +                     // merchId
   "11000000679315" +             // atomTxnId
   "Test123450" +                 // merchTxnId
-  "1.00" +                       // totalAmount（小数点2桁）
+  "1.00" +                       // totalAmount (2 decimal places)
   "OTS0000" +                    // statusCode
-  "CC" +                         // subChannel（配列の最初の要素）
+  "CC" +                         // subChannel (first element of array)
   "0011000000679315624";         // bankTxnId
 
-// サーバー側で署名を計算
+// Calculate signature on server side
 const calculatedSignature = crypto.createHmac('sha512', 'KEYRESP123657234')
   .update(signatureString)
   .digest('hex');
 ```
 
-#### **検証関数**
+#### **Verification Function**
 ```javascript
 function verifyCallbackSignature(callbackData) {
   const RES_HASH_KEY = "KEYRESP123657234";
   
-  // レスポンスデータから値を抽出
+  // Extract values from response data
   const r = callbackData.payInstrument;
   
   const signatureString = [
     r.merchDetails.merchId.toString(),
     r.payDetails.atomTxnId.toString(),
     r.merchDetails.merchTxnId.toString(),
-    Number(r.payDetails.totalAmount).toFixed(2),  // 小数点2桁
+    Number(r.payDetails.totalAmount).toFixed(2),  // 2 decimal places
     r.responseDetails.statusCode.toString(),
-    r.payModeSpecificData.subChannel[0].toString(), // 配列の最初の要素
+    r.payModeSpecificData.subChannel[0].toString(), // First element of array
     r.payModeSpecificData.bankDetails.bankTxnId.toString()
   ].join('');
   
-  // サーバー側署名を計算
+  // Calculate server-side signature
   const calculatedSignature = crypto.createHmac('sha512', RES_HASH_KEY)
     .update(signatureString)
     .digest('hex');
   
-  // 受信した署名と比較
+  // Compare with received signature
   const receivedSignature = r.payDetails.signature;
   
   return {
@@ -214,12 +214,12 @@ function verifyCallbackSignature(callbackData) {
 
 ---
 
-## 🔍 **署名デバッグ用ツール**
+## 🔍 **Signature Debugging Tools**
 
-### **統合デバッグ関数**
+### **Integrated Debug Function**
 ```javascript
 function debugSignature(data, apiType) {
-  console.log(`🔍 ${apiType} 署名デバッグ開始`);
+  console.log(`🔍 ${apiType} signature debugging started`);
   
   let parts = [];
   let hashKey = '';
@@ -262,21 +262,21 @@ function debugSignature(data, apiType) {
       break;
   }
   
-  console.log('署名構成要素:');
+  console.log('Signature components:');
   parts.forEach((part, index) => {
-    console.log(`${index + 1}. ${part.name}: "${part.value}" (長さ: ${part.value.length})`);
+    console.log(`${index + 1}. ${part.name}: "${part.value}" (length: ${part.value.length})`);
   });
   
   const signatureString = parts.map(p => p.value).join('');
-  console.log(`\n署名文字列: "${signatureString}"`);
-  console.log(`文字列長: ${signatureString.length}`);
-  console.log(`ハッシュキー: ${hashKey}`);
+  console.log(`\nSignature string: "${signatureString}"`);
+  console.log(`String length: ${signatureString.length}`);
+  console.log(`Hash key: ${hashKey}`);
   
   const signature = crypto.createHmac('sha512', hashKey)
     .update(signatureString)
     .digest('hex');
   
-  console.log(`生成された署名: ${signature}`);
+  console.log(`Generated signature: ${signature}`);
   
   return {
     signatureString,
@@ -288,75 +288,75 @@ function debugSignature(data, apiType) {
 
 ---
 
-## 📋 **API別署名チェックリスト**
+## 📋 **Signature Checklist by API**
 
-### **Transaction Status API署名**
-- [ ] `merchId`は数値を文字列化
-- [ ] `merchTxnId`は元のマーチャント取引ID
-- [ ] `amount`は整数（小数点なし）
-- [ ] `txnCurrency`は通貨コード（通常INR）
-- [ ] ハッシュキー`"KEY123657234"`を使用
-- [ ] 署名文字列の順序: merchId → merchTxnId → amount → txnCurrency
+### **Transaction Status API Signature**
+- [ ] `merchId` is number converted to string
+- [ ] `merchTxnId` is original merchant transaction ID
+- [ ] `amount` is integer (no decimal point)
+- [ ] `txnCurrency` is currency code (usually INR)
+- [ ] Use hash key `"KEY123657234"`
+- [ ] Signature string order: merchId → merchTxnId → amount → txnCurrency
 
-### **Refund API署名**
-- [ ] `merchId`は数値を文字列化
-- [ ] `password`は正確なマーチャントパスワード
-- [ ] `merchTxnId`は元の決済時と同じID
-- [ ] `totalRefundAmount`は整数（小数点なし）
-- [ ] `txnCurrency`は通貨コード（通常INR）
-- [ ] API固定値`"REFUNDINIT"`を末尾に追加
-- [ ] ハッシュキー`"KEY123657234"`を使用
+### **Refund API Signature**
+- [ ] `merchId` is number converted to string
+- [ ] `password` is exact merchant password
+- [ ] `merchTxnId` is same ID as original payment
+- [ ] `totalRefundAmount` is integer (no decimal point)
+- [ ] `txnCurrency` is currency code (usually INR)
+- [ ] Add API fixed value `"REFUNDINIT"` at the end
+- [ ] Use hash key `"KEY123657234"`
 
-### **Callback署名検証**
-- [ ] `merchId`は数値を文字列化
-- [ ] `atomTxnId`はAtomから返された値
-- [ ] `merchTxnId`は自分で生成したID
-- [ ] `totalAmount`は小数点2桁でフォーマット
-- [ ] `statusCode`は`"OTS0000"`など
-- [ ] `subChannel`は配列の最初の要素を取得
-- [ ] `bankTxnId`は銀行取引ID
-- [ ] ハッシュキー`"KEYRESP123657234"`を使用
+### **Callback Signature Verification**
+- [ ] `merchId` is number converted to string
+- [ ] `atomTxnId` is value returned from Atom
+- [ ] `merchTxnId` is self-generated ID
+- [ ] `totalAmount` is formatted with 2 decimal places
+- [ ] `statusCode` is `"OTS0000"`, etc.
+- [ ] `subChannel` gets first element of array
+- [ ] `bankTxnId` is bank transaction ID
+- [ ] Use hash key `"KEYRESP123657234"`
 
 ---
 
-## ⚠️ **よくある署名エラーと対処法**
+## ⚠️ **Common Signature Errors and Solutions**
 
-### **1. OTS0506 (署名不一致) - Transaction Status**
+### **1. OTS0506 (Signature Mismatch) - Transaction Status**
 ```javascript
-// ❌ 間違い: 小数点を含める
+// ❌ Wrong: Include decimal point
 const amount = 1.00;
 const signatureString = `${merchId}${merchTxnId}${amount}${currency}`;
 
-// ✅ 正しい: 整数として処理
+// ✅ Correct: Process as integer
 const amount = Math.floor(1.00); // 1
 const signatureString = `${merchId}${merchTxnId}${amount}${currency}`;
 ```
 
-### **2. OTS0506 (署名不一致) - Refund**
+### **2. OTS0506 (Signature Mismatch) - Refund**
 ```javascript
-// ❌ 間違い: 小数点を含める
+// ❌ Wrong: Include decimal point
 const refundAmount = 5.00;
 const signatureString = `${merchId}${password}${merchTxnId}${refundAmount}${currency}REFUNDINIT`;
 
-// ✅ 正しい: 整数として処理  
+// ✅ Correct: Process as integer  
 const refundAmount = Math.floor(5.00); // 5
 const signatureString = `${merchId}${password}${merchTxnId}${refundAmount}${currency}REFUNDINIT`;
 ```
 
-### **3. Callback署名検証失敗**
+### **3. Callback Signature Verification Failed**
 ```javascript
-// ❌ 間違い: subChannelを文字列として取得
+// ❌ Wrong: Get subChannel as string
 const subChannel = "CC";
 
-// ✅ 正しい: 配列の最初の要素を取得
+// ✅ Correct: Get first element of array
 const subChannel = responseData.payModeSpecificData.subChannel[0]; // "CC"
 ```
 
 ---
 
-## 🧪 **テストケース**
+## 🧪 **Test Cases**
 
-### **Transaction Status署名テスト**
+### **Transaction Status Signature Test**
 ```javascript
 const testData = {
   merchId: 317157,
@@ -366,10 +366,10 @@ const testData = {
 };
 
 const signature = generateTransactionStatusSignature(testData);
-console.log('Transaction Status署名:', signature);
+console.log('Transaction Status signature:', signature);
 ```
 
-### **Refund署名テスト**
+### **Refund Signature Test**
 ```javascript
 const testData = {
   merchId: 317157,
@@ -382,17 +382,17 @@ const testData = {
 const expectedSignature = "a4df464724d1154cf2d33baf9b08cb6740637040e46d29034de472445b0df68af31de3c7089c0355bf0b5c887d568cd87b43a7b875ded9de8c9c946d4e57d40d";
 const actualSignature = generateRefundSignature(testData);
 
-console.log('期待値:', expectedSignature);
-console.log('実際値:', actualSignature);
-console.log('一致:', actualSignature === expectedSignature);
+console.log('Expected:', expectedSignature);
+console.log('Actual:', actualSignature);
+console.log('Match:', actualSignature === expectedSignature);
 ```
 
-### **統合テスト関数**
+### **Integration Test Function**
 ```javascript
 function runAllSignatureTests() {
   const tests = [
     {
-      name: "Transaction Status署名テスト",
+      name: "Transaction Status Signature Test",
       type: "transaction_status",
       data: {
         merchId: 317157,
@@ -402,7 +402,7 @@ function runAllSignatureTests() {
       }
     },
     {
-      name: "Refund署名テスト",
+      name: "Refund Signature Test",
       type: "refund", 
       data: {
         merchId: 317157,
@@ -422,17 +422,16 @@ function runAllSignatureTests() {
       
       if (test.expected) {
         const passed = result.signature === test.expected;
-        console.log(`結果: ${passed ? '✅ PASS' : '❌ FAIL'}`);
+        console.log(`Result: ${passed ? '✅ PASS' : '❌ FAIL'}`);
         if (!passed) {
-          console.log(`期待値: ${test.expected}`);
-          console.log(`実際値: ${result.signature}`);
+          console.log(`Expected: ${test.expected}`);
+          console.log(`Actual: ${result.signature}`);
         }
       } else {
-        console.log(`生成完了: ${result.signature}`);
+        console.log(`Generated: ${result.signature}`);
       }
     } catch (error) {
       console.log(`❌ ERROR: ${error.message}`);
     }
   });
 }
-```

@@ -1,0 +1,7 @@
+# .dxtignore
+.git/
+.gitignore
+.env*
+package-lock.json
+*.log
+.DS_Store
