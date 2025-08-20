@@ -320,7 +320,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         content: [
           {
             type: "text",
-            text: `Payment API Implementation - Complete Context:
+            text: `Payment API Implementation by NDPSI (NTT DATA Payment Services India) - Complete Context:
 
 # Payment Processing Flow
 ${paymentFlow}
