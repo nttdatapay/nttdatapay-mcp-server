@@ -7,7 +7,7 @@
 Purpose: Payment token ID acquisition
 Method: POST
 UAT: https://paynetzuat.atomtech.in/otsv2/aipay/auth
-PROD: https://payment1.atomtech.in/otsv2/aipay/auth
+PROD: https://payment.atomtech.in/otsv2/aipay/auth
 ```
 
 ### **2. Get Transaction Status API**
@@ -15,7 +15,7 @@ PROD: https://payment1.atomtech.in/otsv2/aipay/auth
 Purpose: Transaction status confirmation
 Method: POST
 UAT: https://paynetzuat.atomtech.in/otsv2/payment/status
-PROD: https://payment1.atomtech.in/otsv2/payment/status
+PROD: https://payment.atomtech.in/otsv2/payment/status
 ```
 
 ### **3. Callback API**
@@ -23,7 +23,7 @@ PROD: https://payment1.atomtech.in/otsv2/payment/status
 Purpose: Payment completion notification reception
 Method: POST
 UAT: https://paynetzuat.atomtech.in/
-PROD: https://payment1.atomtech.in/
+PROD: https://payment.atomtech.in/
 ```
 
 ### **4. Product Sample Refund Request API**
@@ -39,7 +39,7 @@ PROD: https://payment.atomtech.in/otsv2/payment/refund
 Purpose: Refund status confirmation
 Method: POST
 UAT: https://paynetzuat.atomtech.in/ots/payment/status
-PROD: https://payment1.atomtech.in/ots/payment/status
+PROD: https://payment.atomtech.in/ots/payment/status
 ```
 
 ---

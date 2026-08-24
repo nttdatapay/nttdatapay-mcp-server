@@ -442,8 +442,8 @@ const AtomConfig = {
         RES_ENC_KEY: process.env.RES_ENC_KEY,
         RES_SALT: process.env.RES_SALT,
         RES_HASH_KEY: process.env.RES_HASH_KEY,
-        API_BASE_URL: "https://payment1.atomtech.in",
-        SCRIPT_URL: "https://payment1.atomtech.in/staticdata/ots/js/atomcheckout.js",
+        API_BASE_URL: "https://payment.atomtech.in",
+        SCRIPT_URL: "https://payment.atomtech.in/staticdata/ots/js/atomcheckout.js",
         ENVIRONMENT: "prod"
     }
 };
