@@ -2,10 +2,10 @@
     "dxt_version": "0.1",
     "name": "NDPSI-knowledge-mcp",
     "display_name": "NDPSI Knowledge Server",
-    "version": "1.0.0", 
+    "version": "1.0.1", 
     "description": "NDPSI knowledge base integration for AI agents",
     "author": {
-      "name": "Tomoya Tachibana"
+      "name": "Sagar Gopale"
     },
     "server": {
       "type": "node",

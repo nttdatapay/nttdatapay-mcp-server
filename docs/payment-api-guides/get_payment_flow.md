@@ -209,6 +209,7 @@ const CONFIG = {
     REQ_HASH_KEY: "KEY123657234",
     RES_ENC_KEY: "75AEF0FA1B94B3C10D4F5B268F757F11", 
     RES_SALT: "75AEF0FA1B94B3C10D4F5B268F757F11",
+    SECRET_KEY: "msk_b25CxTmGrrtgKpP1sNCkOkQcNz9oXJvw0HhnP9Tjraft",
     HASH_KEY: "KEYRESP123657234",  // For response signature verification
     API_URL: "https://paynetzuat.atomtech.in",
     SCRIPT_URL: "https://pgtest.atomtech.in/staticdata/ots/js/atomcheckout.js"
@@ -299,9 +300,20 @@ app.post('/payment', async (req, res) => {
     const formData = `encData=${encodeURIComponent(encData)}&merchId=${CONFIG.MERCHANT_ID}`;
     
     try {
-        const response = await axios.post(`${CONFIG.API_URL}/ots/aipay/auth`, formData, {
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-        });
+        
+        const authString = `${CONFIG.MERCHANT_ID}:${CONFIG.SECRET_KEY}`;
+        const bearerToken = Buffer.from(authString).toString('base64');
+
+        const response = await axios.post(
+            `${CONFIG.API_URL}/otsv2/aipay/auth`,
+            formData,
+            {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Authorization': `Bearer ${bearerToken}`
+                }
+            }
+        );
         
         const match = response.data.match(/encData=([^&]+)/);
         const result = decrypt(decodeURIComponent(match[1]));

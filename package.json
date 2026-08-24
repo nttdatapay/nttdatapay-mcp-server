@@ -1,11 +1,11 @@
 {
   "name": "NDPSI-mcp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "NDPSI knowledge base for MCP",
   "main": "src/index.js",
   "type": "module",
   "private": true,
-  "author": "Tomoya Tachibana",
+  "author": "Sagar Gopale",
   "license": "MIT",
   "repository": {
     "type": "git",

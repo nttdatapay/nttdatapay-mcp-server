@@ -6,16 +6,16 @@
 ```yaml
 Purpose: Payment token ID acquisition
 Method: POST
-UAT: https://paynetzuat.atomtech.in/ots/aipay/auth
-PROD: https://payment1.atomtech.in/ots/aipay/auth
+UAT: https://paynetzuat.atomtech.in/otsv2/aipay/auth
+PROD: https://payment1.atomtech.in/otsv2/aipay/auth
 ```
 
 ### **2. Get Transaction Status API**
 ```yaml
 Purpose: Transaction status confirmation
 Method: POST
-UAT: https://paynetzuat.atomtech.in/ots/v2/payment/status
-PROD: https://payment1.atomtech.in/ots/v2/payment/status
+UAT: https://paynetzuat.atomtech.in/otsv2/payment/status
+PROD: https://payment1.atomtech.in/otsv2/payment/status
 ```
 
 ### **3. Callback API**
@@ -30,15 +30,15 @@ PROD: https://payment1.atomtech.in/
 ```yaml
 Purpose: Refund execution
 Method: POST
-UAT: https://caller.atomtech.in/ots/payment/refund
-PROD: https://payment.atomtech.in/ots/payment/refund
+UAT: https://paynetzuat.atomtech.in/otsv2/payment/refund
+PROD: https://payment.atomtech.in/otsv2/payment/refund
 ```
 
 ### **5. Get Refund Status API**
 ```yaml
 Purpose: Refund status confirmation
 Method: POST
-UAT: https://caller.atomtech.in/ots/payment/status
+UAT: https://paynetzuat.atomtech.in/ots/payment/status
 PROD: https://payment1.atomtech.in/ots/payment/status
 ```
 
@@ -633,9 +633,23 @@ Signature string = merchId + atomTxnId + merchTxnId + totalAmount.toFixed(2) + s
 
 ### **Common for All APIs**
 ```
+Authorization: Bearer {Base64(Merchant ID:Secret Key)}
 Content-Type: application/x-www-form-urlencoded
 Body: merchId={Merchant ID}&encData={Encrypted JSON}
 ```
+
+### **Authorization**
+
+The Atom authentication API requires an Authorization header.
+
+1. Create the credential string:
+   `{Merchant ID}:{Secret Key}`
+
+2. Base64 encode the complete credential string.
+
+3. Send the encoded value using the Bearer scheme:
+
+   `Authorization: Bearer {Base64(Merchant ID:Secret Key)}`
 
 ### **Encryption Process**
 1. Stringify JSON payload

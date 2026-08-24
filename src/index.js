@@ -20,7 +20,7 @@ const docsPath = join(__dirname, '..', 'docs', 'payment-api-guides');
 const server = new Server(
   {
     name: "payment-knowledge-server",
-    version: "1.0.0",
+    version: "1.0.1",
   },
   {
     capabilities: {
